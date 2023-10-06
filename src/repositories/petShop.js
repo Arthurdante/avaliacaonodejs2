@@ -1,10 +1,12 @@
 const ModelPetShopCliente = require('../models/modelCliente')
+const ModelPetShopCachorro = require('../models/modelCachorro')
 
 class RepositorioPetshop {
 
-    async PegarUmCliente( id ) {
+    async PegarUmCliente( id, transaction) {
         return ModelPetShopCliente.findOne({
-            where: { id }
+            where: { id },
+            transaction
         })
     }
 
@@ -12,16 +14,63 @@ class RepositorioPetshop {
         return ModelPetShopCliente.findAll()
     }
 
-    async Adicionar(nome) {
-        return nomes.push(nome)
-    } 
+    async AddCliente(cliente, transaction) {
+        const result = await ModelPetShopCliente.create(cliente, { transaction })
 
-    async Alterar(index, nome) {
-        return nomes[index] = nome
+        return result
     }
 
-    async Deletar(index) {
-        return nomes.splice(index, 1)
+    async UpdateCliente(id, cliente) {
+        const result = await ModelPetShopCliente.update(cliente, {
+            where: {
+                id
+            }
+        })
+
+        console.log(result)
+
+        return result
+    }
+
+    async DeleteCliente(id) {
+        return ModelPetShopCliente.destroy({
+            where: { id }
+        });
+    }
+
+    async PegarUmCachorro( id, transaction) {
+        return ModelPetShopCachorro.findOne({
+            where: { id },
+            transaction
+        })
+    }
+
+    async PegarTodosCachorro() {
+        return ModelPetShopCachorro.findAll()
+    }
+
+    async AddCachorro(cachorro, transaction) {
+        const result = await ModelPetShopCachorro.create(cachorro, { transaction })
+
+        return result
+    }
+
+    async UpdateCachorro(id, cachorro) {
+        const result = await ModelPetShopCachorro.update(cachorro, {
+            where: {
+                id
+            }
+        })
+
+        console.log(result)
+
+        return result
+    }
+
+    async DeleteCachorro(id) {
+        return ModelPetShopCachorro.destroy({
+            where: { id }
+        });
     }
 
 }

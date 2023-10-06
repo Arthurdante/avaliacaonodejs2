@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize')
 const conexao = require('../database.js')
+const ModelPetShopCachorro = require('../models/modelCachorro')
+
 
 const ModelPetShopCliente = conexao.define('clientes', {
     id: {
@@ -13,11 +15,14 @@ const ModelPetShopCliente = conexao.define('clientes', {
     },
     telerfone: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     }
 }, {
     createdAt: false,
-    updatedAt: false
+    updatedAt: false,
 })
+ModelPetShopCachorro.belongsTo(ModelPetShopCliente, { foreignKey: 'clienteId' })
+ModelPetShopCliente.hasMany(ModelPetShopCachorro, { foreignKey: 'clienteId' })
 
 module.exports = ModelPetShopCliente

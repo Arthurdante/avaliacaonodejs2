@@ -4,7 +4,7 @@ module.exports = {
     development: {
         username: 'root',
         password:  '',
-        database: process.env.DATABASE_URL,
+        database: 'petshop',
         host: 'localhost',
         dialect: 'mysql2'
     }

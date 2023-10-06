@@ -15,43 +15,103 @@ class ControllerPetShop{
             res.status(500).json({ message: "Erro ao pegar um nome" })
         }
     }
-    async PegarTodosCliente(req, res){
+    async PegarTodosCliente(_, res){
         try {
-            const result = servico.PegarTodos()
+            const result = await servico.PegarTodosCliente()
             res.status(200).json({ 
-                nomes: result
+                Clientes: result
             })
         } catch (error) {
+            console.log('Erro no controller', error)
             res.status(500).json({ message: "Erro ao listar todos os nomes" })
         }
     }
-    async Adicionar(req, res){
+    async AddCliente(req, res){
         try {
-            const result = servico.Adicionar(req.body.nome)
+            const result = await servico.AddCliente(req.body.cliente)
             res.status(200).json({ 
-                message: "Nome adicionado com sucesso",
+                pessoa: result
             })
         } catch (error) {
+            console.log('Erro no controller', error)
             res.status(500).json({ message: "Erro ao adicionar" })
         }
     }
-    async Alterar(req, res){
+    async UpdateCliente(req, res){
         try {
-            servico.Alterar(req.params.index, req.body.nome)
+            servico.UpdateCliente(req.params.id, req.body.cliente)
             res.status(200).json({ 
-                message: "Nome alterado com sucesso",
+                pessoa: result
             })
         } catch (error) {
+            console.log('Erro no controller', error)
             res.status(500).json({ message: "Erro ao alterar" })
         }
     }
-    async Deletar(req, res){
+    async DeletarCliente(req, res){
         try {
-            servico.Deletar(req.params.index)
+            servico.DeletarCliente(req.params.id)
             res.status(200).json({ 
                 message: "Nome deletado com sucesso",
             })
         } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao deletar" })
+        }
+    }
+
+    async PegarUmCachorro(req, res){
+        try {
+            const result = await servico.PegarUmCachorro(req.params.id)
+            res.status(200).json({ 
+                Cachorro: result 
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao pegar um nome" })
+        }
+    }
+    async PegarTodosCachorro(_, res){
+        try {
+            const result = await servico.PegarTodosCachorro()
+            res.status(200).json({ 
+                Cachorros: result
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao listar todos os nomes" })
+        }
+    }
+    async AddCachorro(req, res){
+        try {
+            const result = await servico.AddCachorro(req.body.cachorro)
+            res.status(200).json({ 
+                pessoa: result
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao adicionar" })
+        }
+    }
+    async UpdateCachorro(req, res){
+        try {
+            servico.UpdateCachorro(req.params.id, req.body.cachorro)
+            res.status(200).json({ 
+                pessoa: result
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao alterar" })
+        }
+    }
+    async DeletarCachorro(req, res){
+        try {
+            servico.DeletarCachorro(req.params.id)
+            res.status(200).json({ 
+                message: "Nome deletado com sucesso",
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
             res.status(500).json({ message: "Erro ao deletar" })
         }
     }
