@@ -27,11 +27,22 @@ module.exports = conexao
 
 // CREATE TABLE cachorros (
 
+//     id INT AUTO_INCREMENT PRIMARY KEY,
+
 //     nome VARCHAR(255) NOT NULL,
    
 //     raca VARCHAR(255) NOT NULL,
 
 //     cliente_id INT,
     
-//     FOREIGN KEY (cliente_id) REFERENCES clientes(id);
+//     FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+// );
+// CREATE TABLE atendimentos (
+//     id INT AUTO_INCREMENT PRIMARY KEY,
+//     dia DATE NOT NULL,
+//     hora TIME NOT NULL,
+//     valor FLOAT NOT NULL,
+//     cachorro_id INT,
+//     concluido BOOLEAN NOT NULL DEFAULT FALSE,
+//     FOREIGN KEY (cachorro_id) REFERENCES cachorros(id)
 // );

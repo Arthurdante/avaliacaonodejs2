@@ -1,15 +1,26 @@
 const ModelPetShopCliente = require('../models/modelCliente')
 const ModelPetShopCachorro = require('../models/modelCachorro')
+const ModelPetShopAtendimento = require('../models/modelAtendimento')
 
 class RepositorioPetshop {
 
     async PegarUmCliente( id, transaction) {
-        return ModelPetShopCliente.findOne({
-            where: { id },
-            transaction
-        })
+        try {
+            const cliente = await ModelPetShopCliente.findOne({
+                where: { id },
+                transaction,
+                include: [{ model: ModelPetShopCachorro }]
+            });
+    
+            if (!cliente) {
+                throw new Error('Cliente não encontrado')
+            }
+            return cliente
+        }catch (error) {
+            console.log('Erro no repositorio', error)
+            res.status(500).json({ message: "Erro ao listar o nome do cliente" })
+        }
     }
-
     async PegarTodosCliente() {
         return ModelPetShopCliente.findAll()
     }
@@ -21,15 +32,14 @@ class RepositorioPetshop {
     }
 
     async UpdateCliente(id, cliente) {
-        const result = await ModelPetShopCliente.update(cliente, {
+        await ModelPetShopCliente.update(cliente, {
             where: {
                 id
             }
         })
-
-        console.log(result)
-
-        return result
+        return ModelPetShopCliente.findOne({
+            where: { id }
+        })
     }
 
     async DeleteCliente(id) {
@@ -39,10 +49,21 @@ class RepositorioPetshop {
     }
 
     async PegarUmCachorro( id, transaction) {
-        return ModelPetShopCachorro.findOne({
-            where: { id },
-            transaction
-        })
+        try {
+            const cachorro = await ModelPetShopCachorro.findOne({
+                where: { id },
+                transaction,
+                include: [{ model: ModelPetShopAtendimento }]
+            });
+    
+            if (!cachorro) {
+                throw new Error('Cliente não encontrado')
+            }
+            return cachorro
+        }catch (error) {
+            console.log('Erro no repositorio', error)
+            res.status(500).json({ message: "Erro ao listar o nome do cachorro" })
+        }
     }
 
     async PegarTodosCachorro() {
@@ -56,15 +77,14 @@ class RepositorioPetshop {
     }
 
     async UpdateCachorro(id, cachorro) {
-        const result = await ModelPetShopCachorro.update(cachorro, {
+        await ModelPetShopCachorro.update(cachorro, {
             where: {
                 id
             }
         })
-
-        console.log(result)
-
-        return result
+        return ModelPetShopCachorro.findOne({
+            where: { id }
+        })
     }
 
     async DeleteCachorro(id) {
@@ -73,5 +93,40 @@ class RepositorioPetshop {
         });
     }
 
+    async PegarUmAtendimento( id, transaction) {
+        
+        return await ModelPetShopAtendimento.findOne({
+            where: { id },
+            transaction,
+        });
+    
+    }
+
+    async PegarTodosAtendimento() {
+        return ModelPetShopAtendimento.findAll()
+    }
+
+    async AddAtendimento(atendimento, transaction) {
+        const result = await ModelPetShopAtendimento.create(atendimento, { transaction })
+
+        return result
+    }
+
+    async UpdateAtendimento(id, atendimento) {
+        await ModelPetShopAtendimento.update(atendimento, {
+            where: {
+                id
+            }
+        })
+        return ModelPetShopAtendimento.findOne({
+            where: { id }
+        })
+    }
+
+    async DeleteAtendimento(id) {
+        return ModelPetShopAtendimento.destroy({
+            where: { id }
+        });
+    }
 }
 module.exports = RepositorioPetshop

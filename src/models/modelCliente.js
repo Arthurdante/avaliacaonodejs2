@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize')
 const conexao = require('../database.js')
 const ModelPetShopCachorro = require('../models/modelCachorro')
 
-
 const ModelPetShopCliente = conexao.define('clientes', {
     id: {
         primaryKey: true,
@@ -13,7 +12,7 @@ const ModelPetShopCliente = conexao.define('clientes', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    telerfone: {
+    telefone: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true

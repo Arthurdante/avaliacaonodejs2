@@ -30,7 +30,7 @@ class ControllerPetShop{
         try {
             const result = await servico.AddCliente(req.body.cliente)
             res.status(200).json({ 
-                pessoa: result
+                Cliente: result
             })
         } catch (error) {
             console.log('Erro no controller', error)
@@ -39,9 +39,9 @@ class ControllerPetShop{
     }
     async UpdateCliente(req, res){
         try {
-            servico.UpdateCliente(req.params.id, req.body.cliente)
+            const result = await servico.UpdateCliente(req.params.id, req.body.cliente)
             res.status(200).json({ 
-                pessoa: result
+                Cliente: result
             })
         } catch (error) {
             console.log('Erro no controller', error)
@@ -52,7 +52,7 @@ class ControllerPetShop{
         try {
             servico.DeletarCliente(req.params.id)
             res.status(200).json({ 
-                message: "Nome deletado com sucesso",
+                message: "Cliente deletado com sucesso",
             })
         } catch (error) {
             console.log('Erro no controller', error)
@@ -86,7 +86,7 @@ class ControllerPetShop{
         try {
             const result = await servico.AddCachorro(req.body.cachorro)
             res.status(200).json({ 
-                pessoa: result
+                Cachorros: result
             })
         } catch (error) {
             console.log('Erro no controller', error)
@@ -95,9 +95,9 @@ class ControllerPetShop{
     }
     async UpdateCachorro(req, res){
         try {
-            servico.UpdateCachorro(req.params.id, req.body.cachorro)
+            const result = await servico.UpdateCachorro(req.params.id, req.body.cachorro)
             res.status(200).json({ 
-                pessoa: result
+                Cachorros: result
             })
         } catch (error) {
             console.log('Erro no controller', error)
@@ -108,7 +108,63 @@ class ControllerPetShop{
         try {
             servico.DeletarCachorro(req.params.id)
             res.status(200).json({ 
-                message: "Nome deletado com sucesso",
+                message: "Cachorros deletado com sucesso",
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao deletar" })
+        }
+    }
+
+    async PegarUmAtendimento(req, res){
+        try {
+            const result = await servico.PegarUmAtendimento(req.params.id)
+            res.status(200).json({ 
+                Atendimento: result 
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao pegar o atendimento" })
+        }
+    }
+    async PegarTodosAtendimento(_, res){
+        try {
+            const result = await servico.PegarTodosAtendimento()
+            res.status(200).json({ 
+                Atendimentos: result
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao listar todos os atendimentos" })
+        }
+    }
+    async AddAtendimento(req, res){
+        try {
+            const result = await servico.AddAtendimento(req.body.atendimento)
+            res.status(200).json({ 
+                Atendimentos: result
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao adicionar" })
+        }
+    }
+    async UpdateAtendimento(req, res){
+        try {
+            const result = await servico.UpdateAtendimento(req.params.id, req.body.atendimento)
+            res.status(200).json({ 
+                Atendimentos: result
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao alterar" })
+        }
+    }
+    async DeletarAtendimento(req, res){
+        try {
+            servico.DeletarAtendimento(req.params.id)
+            res.status(200).json({ 
+                message: "Atendimento deletado com sucesso",
             })
         } catch (error) {
             console.log('Erro no controller', error)

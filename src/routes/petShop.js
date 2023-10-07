@@ -15,4 +15,10 @@ router.get('/api/cachorros', controller.PegarTodosCachorro)
 router.post('/api/cachorro', controller.AddCachorro)
 router.put('/api/cachorro/:id', controller.UpdateCachorro)
 router.delete('/api/cachorro/:id', controller.DeletarCachorro)
+
+router.get('/api/atendimento/:id', controller.PegarUmAtendimento)
+router.get('/api/atendimentos', controller.PegarTodosAtendimento)
+router.post('/api/atendimento', controller.AddAtendimento)
+router.put('/api/atendimento/:id', controller.UpdateAtendimento)
+router.delete('/api/atendimento/:id', controller.DeletarAtendimento)
 module.exports = router
