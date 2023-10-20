@@ -113,5 +113,24 @@ class ServicoPetShop {
     async DeletarAtendimento(id) {
         return repositorio.DeleteAtendimento(id);
     }
+
+    async PegarUmPorEmail(email){
+        if(!email.trim()) {
+          throw new Error("Preencha o email")
+        }
+        return repositorio.PegarUmPorEmail(email)
+    }
+
+    async AdicionarUsuario(usuario, isAdmin = 1){
+        if(!usuario.email) {
+          throw new Error("Favor preencher o email.")
+        } else if(!usuario.senha) {
+          throw new Error("Favor preencher o senha.")
+        }else if(!usuario.cliente_id) {
+            throw new Error("Favor preencher o senha.")
+          }
+  
+        return repositorio.AdicionarUsuario(usuario, isAdmin)
+      }
 }
 module.exports = ServicoPetShop

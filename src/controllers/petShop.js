@@ -1,6 +1,9 @@
 const ServicoPetShop = require('../services/petShop')
-
 const servico = new ServicoPetShop()
+
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const config = require("../config.js")
 
 class ControllerPetShop{
 
@@ -169,6 +172,53 @@ class ControllerPetShop{
         } catch (error) {
             console.log('Erro no controller', error)
             res.status(500).json({ message: "Erro ao deletar" })
+        }
+    }
+    async Login(req, res){
+        const { email, senha } = req.body;
+      
+        const { dataValues: ModelPetShopUsuario } = await servico.PegarUmPorEmail(email);
+        
+        if (!ModelPetShopUsuario) {
+            return res.status(401).json({ mensagem: 'Credenciais inválidas' });
+        }
+        console.log(ModelPetShopUsuario.senha, senha)
+        if (!(await bcrypt.compare(senha, ModelPetShopUsuario.senha))) {
+            return res.status(401).json({ mensagem: 'Credenciais inválidas' });
+        }
+        
+        const token = jwt.sign(
+            { id: ModelPetShopUsuario.id, nome: ModelPetShopUsuario.nome, email: ModelPetShopUsuario.email, cliente_id: ModelPetShopUsuario.cliente_id},
+            config.secret
+        );
+        
+        res.json({ mensagem: 'Login bem-sucedido', token });
+    }
+    async AdicionarUsuario(req, res) {
+        try {
+            const { usuario } = req.body
+            await servico.AdicionarUsuario(usuario)
+            res.status(201).json({ message: "Adicionado com sucesso!" });
+        } catch (error) {
+            if (error.parent && error.parent.code === "ER_DUP_ENTRY") {
+                res.status(400).json({ message: "Email já cadastrado!" });
+            } else {
+                res.status(500).json({ message: error.parent?.message || error.message });
+            }
+        }
+    }
+    
+    async AdicionarAdm(req, res) {
+        try {
+            const { usuario } = req.body
+            await servico.AdicionarAdm(usuario, 0)
+            res.status(201).json({ message: "Adicionado com sucesso!" });
+        } catch (error) {
+            if (error.parent && error.parent.code === "ER_DUP_ENTRY") {
+                res.status(400).json({ message: "Email já cadastrado!" });
+            } else {
+                res.status(500).json({ message: error.parent?.message || error.message });
+            }
         }
     }
 }

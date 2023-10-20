@@ -1,6 +1,8 @@
 const ModelPetShopCliente = require('../models/modelCliente')
 const ModelPetShopCachorro = require('../models/modelCachorro')
 const ModelPetShopAtendimento = require('../models/modelAtendimento')
+const ModelPetShopUsuario = require("../models/modelUsuario")
+const bcrypt = require('bcrypt')
 
 class RepositorioPetshop {
 
@@ -127,6 +129,20 @@ class RepositorioPetshop {
         return ModelPetShopAtendimento.destroy({
             where: { id }
         });
+    }
+
+    async PegarUmPorEmail(email){
+        return ModelPetShopUsuario.findOne({
+            where: {
+                email
+            }
+        })
+    }
+
+    async AdicionarUsuario(usuario, isAdmin = 1){
+        const senha = await bcrypt.hash(usuario.senha, 10)
+
+        return ModelPetShopUsuario.create({ ...usuario, senha, permissao: isAdmin ? 0 : 1 })
     }
 }
 module.exports = RepositorioPetshop

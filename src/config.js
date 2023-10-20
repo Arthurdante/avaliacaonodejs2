@@ -7,7 +7,8 @@ module.exports = {
         database: 'petshop',
         host: 'localhost',
         dialect: 'mysql'
-    }
+    },
+    secret: 'minha'
 }
 // require('dotenv').config()
 
