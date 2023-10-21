@@ -23,10 +23,10 @@ class ServicoPetShop {
         return repositorio.PegarTodosCliente()
     }
 
-    async AddCliente(cliente, transaction) {
+    async AddCliente(cliente, userid, transaction) {
         this.VerficarCliente(cliente)
 
-        return repositorio.AddCliente(cliente, transaction);
+        return repositorio.AddCliente(cliente, userid, transaction);
     }
 
     async UpdateCliente(id, cliente) {
@@ -121,16 +121,33 @@ class ServicoPetShop {
         return repositorio.PegarUmPorEmail(email)
     }
 
-    async AdicionarUsuario(usuario, isAdmin = 1){
+    async AdicionarUsuario(usuario){
+        
         if(!usuario.email) {
-          throw new Error("Favor preencher o email.")
+            throw new Error("Favor preencher o email.")
         } else if(!usuario.senha) {
-          throw new Error("Favor preencher o senha.")
-        }else if(!usuario.cliente_id) {
             throw new Error("Favor preencher o senha.")
-          }
+        }
   
-        return repositorio.AdicionarUsuario(usuario, isAdmin)
-      }
+        return repositorio.AdicionarUsuario({...usuario, permissao: 1})
+    }
+
+    async AddAtendente(atendente, transaction) {
+    
+        return repositorio.AdicionarUsuario({...atendente, permissao: 2}, transaction);
+    }
+
+    async UpdateAtendente(id, atendente) {
+        if(!id) {
+            throw new Error('Não foi enviada o identificador do atendente para alterar');
+        }
+ 
+        return repositorio.UpdateUsuario(id, atendente);
+    }
+
+    async DeleteAtendente(id) {
+        return repositorio.DeletarUsuario(id);
+
+    }
 }
 module.exports = ServicoPetShop

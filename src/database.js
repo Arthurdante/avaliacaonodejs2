@@ -50,6 +50,4 @@ module.exports = conexao
 //     id INT AUTO_INCREMENT PRIMARY KEY,
 //     email VARCHAR(255) NOT NULL,
 //     senha VARCHAR(255) NOT NULL,
-//     cliente_id INT,
-//     FOREIGN KEY (cliente_id) REFERENCES Clientes(id)
 //   );

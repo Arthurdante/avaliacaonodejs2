@@ -27,8 +27,8 @@ class RepositorioPetshop {
         return ModelPetShopCliente.findAll()
     }
 
-    async AddCliente(cliente, transaction) {
-        const result = await ModelPetShopCliente.create(cliente, { transaction })
+    async AddCliente(cliente, userid, transaction) {
+        const result = await ModelPetShopCliente.create({...cliente, usuarioId: userid}, { transaction })
 
         return result
     }
@@ -139,10 +139,40 @@ class RepositorioPetshop {
         })
     }
 
-    async AdicionarUsuario(usuario, isAdmin = 1){
-        const senha = await bcrypt.hash(usuario.senha, 10)
+    async AdicionarUsuario(usuario){
+        const hashsenha = await bcrypt.hash(usuario.senha, 10)
 
-        return ModelPetShopUsuario.create({ ...usuario, senha, permissao: isAdmin ? 0 : 1 })
+        return ModelPetShopUsuario.create({ ...usuario, senha: hashsenha})
+    }
+
+    async clienteIdJaUsado(clienteId) {
+        try {
+            const usuario = await ModelPetShopUsuario.findOne({
+                where: { cliente_id: clienteId }
+            });
+    
+            return usuario !== null;
+        } catch (error) {
+            console.error('Erro ao verificar se o cliente_id já está sendo usado:', error);
+            return false;
+        }
+    }
+
+    async UpdateUsuario(usuario){
+        const hashsenha = await bcrypt.hash(usuario.senha, 10)
+
+        return ModelPetShopUsuario.update({ ...usuario, senha: hashsenha})
+
+    }
+
+    async DeletarUsuario(id){
+
+        return ModelPetShopUsuario.destroy({
+            where: {
+                id
+            }
+        })
     }
 }
+
 module.exports = RepositorioPetshop

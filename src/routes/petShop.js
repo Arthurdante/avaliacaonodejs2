@@ -5,9 +5,15 @@ const authMiddleware = require("../middleware/auth")
 const controller = new ControllerPetShop()
 const router = express.Router()
 
-router.post("/api/login", controller.Login);
-router.post("/api/signin", controller.AdicionarUsuario);
-router.post('/api/adm', authMiddleware, controller.AdicionarAdm);
+router.post("/api/login", controller.Login)
+router.post("/api/signin", controller.AdicionarUsuario)
+router.post('/api/adm', authMiddleware, controller.AdicionarAdm)
+
+//router.get('/api/Atendente/:id', authMiddleware, controller.PegarUmAtendente)
+//router.get('/api/Atendentes', authMiddleware, controller.PegarTodosAtendente)
+router.post('/api/atendente', authMiddleware, controller.AddAtendente)
+router.put('/api/atendente/:id', authMiddleware, controller.UpdateAtendente)
+router.delete('/api/atendente/:id', authMiddleware, controller.DeleteAtendente)
 
 router.get('/api/cliente/:id', authMiddleware, controller.PegarUmCliente)
 router.get('/api/clientes', authMiddleware, controller.PegarTodosCliente)

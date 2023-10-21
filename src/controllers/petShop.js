@@ -31,7 +31,12 @@ class ControllerPetShop{
     }
     async AddCliente(req, res){
         try {
-            const result = await servico.AddCliente(req.body.cliente)
+            if(req.session.permissao != 1){
+                throw new Error("Permissão negada")
+            }
+            const { usuario } = req.body
+            const user = await servico.AdicionarUsuario(usuario)
+            const result = await servico.AddCliente(req.body.cliente, user.id)
             res.status(200).json({ 
                 Cliente: result
             })
@@ -188,7 +193,7 @@ class ControllerPetShop{
         }
         
         const token = jwt.sign(
-            { id: ModelPetShopUsuario.id, nome: ModelPetShopUsuario.nome, email: ModelPetShopUsuario.email, cliente_id: ModelPetShopUsuario.cliente_id},
+            { id: ModelPetShopUsuario.id, nome: ModelPetShopUsuario.nome, email: ModelPetShopUsuario.email, permissao: ModelPetShopUsuario.permissao},
             config.secret
         );
         
@@ -196,6 +201,9 @@ class ControllerPetShop{
     }
     async AdicionarUsuario(req, res) {
         try {
+            if(req.session.permissao != 2 && req.session.permissao != 0){
+                throw new Error("Permissão negada")
+            }
             const { usuario } = req.body
             await servico.AdicionarUsuario(usuario)
             res.status(201).json({ message: "Adicionado com sucesso!" });
@@ -211,7 +219,7 @@ class ControllerPetShop{
     async AdicionarAdm(req, res) {
         try {
             const { usuario } = req.body
-            await servico.AdicionarAdm(usuario, 0)
+            await servico.AdicionarUsuario(usuario, 0)
             res.status(201).json({ message: "Adicionado com sucesso!" });
         } catch (error) {
             if (error.parent && error.parent.code === "ER_DUP_ENTRY") {
@@ -219,6 +227,42 @@ class ControllerPetShop{
             } else {
                 res.status(500).json({ message: error.parent?.message || error.message });
             }
+        }
+    }
+    async AddAtendente(req, res){
+        try {
+            if(req.session.permissao != 0){
+                throw new Error("Permissão negada")
+            }
+            const result = await servico.AddAtendente(req.body.atendente)
+            res.status(200).json({
+                Usuarios: result
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao adicionar" })
+        }
+    }
+    async UpdateAtendente(req, res){
+        try {
+            const result = await servico.UpdateAtendente(req.params.id, req.body.atendente)
+            res.status(200).json({
+                Usuarios: result
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao alterar" })
+        }
+    }
+    async DeleteAtendente(req, res){
+        try {
+            servico.DeleteAtendente(req.params.id)
+            res.status(200).json({
+                message: "Usuário deletado com sucesso",
+            })
+        } catch (error) {
+            console.log('Erro no controller', error)
+            res.status(500).json({ message: "Erro ao deletar" })
         }
     }
 }
